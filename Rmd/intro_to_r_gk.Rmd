@@ -1,0 +1,502 @@
+---
+title: "Introduction to infectious disease modelling in R"
+output:
+  html_document:
+    self_contained: true 
+---
+
+```{r fitR, cache=FALSE, echo=FALSE, results = "hide"}
+library('curl')
+```
+
+# Objectives
+The aim of this session is to introduce you to the basics of coding within R. 
+To do this, we will introduce you to the basic syntax, via the use of some simple commands such as how to read in data and plot. We will end with the introduction to methods for ode solving in R. 
+
+In this session, you will
+
+1. familiarise yourself with the basic syntax of R
+2. learn how to create basic plots in R
+3. solve an SIR model in R
+4. build an SEIR model and create your own model output. 
+
+# Basic syntax
+
+## Commenting code
+
+Using RStudio we can keep our model code (our 'file.R') separate to our executed code in the Console window. Within R code, anything behind a '#' is "commented" out and won't be executed. It is good coding practice to comment your code as you go through. 
+
+```
+# This is commented code
+```
+
+## Working directory
+The first step when creating a new R file is to specify a working directory. This is the folder on your computer in which you are working. It is likely to be the folder in which the R code is saved (but it doesn't have to be). 
+Each computer will have a different specified address for the working directory. Upon opening R, you can find out "where you are" using
+
+```{r results = "hide"}
+getwd() # Where am I now? 
+``` 
+
+You need to tell the R session where you want it to work. To do this you use the command to "set the working directory" or 'setwd()'. 
+
+For example, on Gwen's computer this is:
+
+```{r results = "hide", eval = FALSE}
+setwd("~/Imperial/Chennai_workshop/")
+```
+You can also label this working directory as 'home', and have other locations stored for plotting or for getting data. 
+
+## Mathematical elements in R
+
+To following symbols represent multiplication '*', addition '+', subtraction '-' and assignment of a name to an object '->'. To check if something is equal use "==", or not equal using "!=". 
+
+Below are examples of the main mathematical structures that we will use in R. Copy the below text into your R session and change the numbers so that you can follow what each command is doing. 
+
+The basic element is the vector:
+```{r results = "hide"}
+v = c(1,2,3,4) # vector
+v
+2*v # doubles every element in vector
+```
+
+You can also construct and manipulate matrices:
+```{r results = "hide", eval = FALSE}
+m = matrix(0,4,2) # matrix of zeros of size 4 x 2
+m # let's look at m
+m[1,] # first row
+m[,1] # first column
+m[,1]<-c(2,3,9) # Error - what does it say?
+m[,1]<-c(2,3) # What happens? 
+m # as multiple then works
+m[,1]<-c(2,3,9,12) # Assign column 1
+m[,2]<-v # Assign column 2 to be the vector we had earlier
+```
+
+Can you generate a matrix of size 5 x 10, filled with 2s except for the first column that has the sequence 1 to 10? 
+
+Simple commands such as 'sum' are already encoded in R.
+```{r results = "hide", eval = FALSE}
+total = sum(m)
+proportions_m = m / total
+sum(proportions_m) #Check = should be 1
+```
+
+Other types of allocations include:
+```{r results = "hide"}
+year <- 1990:1993
+names <- c("payal", "shraddha", "kritika", "itida")
+```
+
+## Help files 
+
+To find help in R you can use several different commands. For example, if you wanted to know more about the "sum" command you would type:
+```{r results = "hide", eval = FALSE}
+help(sum)
+?sum
+??sum
+```
+
+The first two are equivalent, whilst the last will do a full text search of all R's help files. This is most useful when you aren't sure of what the exact function is called in R. In RStudio, there is also the option to search the help pages on the bottom right of the window. Google is also very useful for finding commands. 
+
+Can you use this to find out how you would generate binomial random numbers in R? 
+
+## Packages and libraries
+
+As R is open source, it is being developed and added to all the time. It is likely that you may need commands that are not in the standard R programme that you have installed. 
+
+To get access to these other functions, you need to install 'packages'. These contain 'libraries' of functions, already coded into R, that can perform new or different functions. 
+
+There are two ways to do this:
+1) In RStudio, go to the "Packages" tab and search for the required package and load it. 
+2) Type 
+```{r eval = FALSE}
+install.packages("packagename")
+```
+
+For example, can you install the package "deSolve"? We will use this to solve ordinary differential equations later on in this practical.
+
+Once installed you then have to load the package at the start of the R file. This is done using 
+```{r results = "hide"}
+library(deSolve) # load in the deSolve library of functions
+```
+
+## Reading in data
+
+In order to read in data, the first thing to do is to check that you are pointing R at the right folder by setting the appropriate working directory. To do this make sure you 'setwd(where_the_data_is)'.
+
+For this practical, you will first need to download the required data from ??? Save it in the correct folder and make this your current working directory. 
+
+There are many ways to read in data. For example, download the file `data.csv` from [here](https://github.com/sbfnk/chennai-modelling/raw/master/data/data.csv) and place it in your working directory. Here, as we have a '.csv' file we could use either of:
+
+```{r echo = FALSE}
+curl_download("https://github.com/sbfnk/chennai-modelling/raw/master/data/data.csv", destfile = "data.csv")
+```
+
+```{r results = "hide"}
+mydata <- read.table("data.csv", header=TRUE, sep=",") # Comma seperated... 
+flu_hh <-read.csv("data.csv") # R doesn't like XLS files... likes csv files... (flu in hammersmith hospital)
+```
+Here both 'mydata' and 'flu_hh' have the same data. Can you check this in R?
+The data is read in in the form of a 'data.frame'. This is a type of data format in R that includes both numbers and strings. There is more information on reading in data at 'http://www.statmethods.net/input/importingdata.html'. 
+
+In order to look at the data we have read in there are several useful tools. Copy the below code into your R session and check that you understand all the commands. 
+
+
+```{r results = "hide"}
+flu_hh      # All the data - careful if big file!
+dim(flu_hh) # how big is it
+head(flu_hh) # Top of the data
+tail(flu_hh) # Bottom of the data
+flu_hh[,2]  # First column
+flu_hh$num_inf # or by name (as data.frame). The $ allows you to refer to a specific column. 
+flu_hh[1,]  # First row
+colnames(flu_hh)   # Column names
+times <- flu_hh[,1] # Grab the times in the data
+times           # All the times
+times[2]        # The second time
+```
+
+How would you go about finding the maximum time in this data? At what time is the number of cases maximum? See if you can write code to do this yourself. To do this you may need to use the function 'which' that searches for the location of matching values. The answers to this are below.
+
+```{r results = "hide", eval = FALSE}
+?maximum # Is there a command called maximum?
+??maximum # what does this give you?
+```
+
+```{r results = "hide"}
+max_time<-max(times) # Maximum time
+# At what time is the number maximum?
+max_num<-max(flu_hh[,"num_inf"])
+w<-which(flu_hh[,"num_inf"]==max_num) # very useful function which! searches through for matching entries and gives index back
+time_max_prop <- flu_hh[w,"time"]
+# OR
+time_max_prop <- flu_hh[which(flu_hh[,"num_inf"]==max_num),"time"]
+```
+
+To add another column to a data.frame you simply refer to the name of this new column and assign it to have certain values. For example:
+
+```{r results = "hide"}
+sum = sum(flu_hh[,"num_inf"])
+flu_hh$perc = 100 * flu_hh$num_inf / sum
+sum(flu_hh$perc) # check = 100
+```
+
+## Basic plotting
+
+R has inbuilt useful functions for creating plots. Again, copy and paste the below and check the differences in the output. 
+```{r results = "hide"}
+plot(flu_hh[,1],flu_hh[,2]) # Points
+plot(flu_hh[,"time"],flu_hh[,"num_inf"]) # Points
+lines(flu_hh[,"time"],flu_hh[,"num_inf"]) # add lines to the same plot (and vice versa for points)
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l") # Lines
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red") # Red line
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red",xlab="Time",ylab="Number") # Label axis
+```
+
+You can also alter the size of the axis to focus on certain areas. This use the 'max_prop' from above to focus on the increase in the outbreak only.
+
+```{r results = "hide"}
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red",xlab="Time",ylab="Number",xlim=c(0,time_max_prop)) 
+```
+
+In order to save plots, again you need to check you are in the correct working directory. Then open a file and insert the plot like this:
+
+```{r results = "hide"}
+jpeg("flu_hh.jpg") # or pdf etc.
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red",xlab="Time",ylab="Number") # what do you want to go into the file
+dev.off() # magic plot command - if things break do this until error :) Don't ask me why. 
+```
+You can also plot multiple plots together. For example, using the 'par' command, you can divide the window and then place the plots within it. 
+
+```{r results = "hide"}
+pdf("all_plot.pdf",height=8, width=8)
+par(mfrow=c(2,2)) # if want to plot several plots on to one window in rows x column formation e.g. here 2 x 2
+plot(flu_hh[,1],flu_hh[,2]) # Points
+plot(flu_hh[,"time"],flu_hh[,"num_inf"]) # Points
+lines(flu_hh[,"time"],flu_hh[,"num_inf"]) # add lines to the same plot (and vice versa for points)
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red") # Red line
+plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red",xlab="Time",ylab="Number") # Label axis
+dev.off() # stops the par command - one window per plot
+dev.off() # stops the pdf command
+```
+In order to output data, there is a write equivalent to read (again make sure you are in the appropriate working directory):
+```{r results = "hide"}
+write.table(flu_hh, "flu_hh.txt", sep="\t") 
+write.csv(flu_hh,"flu_hh.csv")
+```
+
+A quick note here on "not a numbers". In R these are 'NA' or 'NaN'. This is usually an error or the result of a silly division.
+```{r eval = FALSE}
+0/0
+1/0 # Infinity = Inf
+```
+
+## Conditionals
+
+Conditionals are built in functions that allow you to compare and contrast elements in R. 
+
+For example, the 'which' function gives you the index of values that match some condition:
+```{r results = "hide"}
+which(flu_hh$time > 60) # index of values that match some condition
+which(flu_hh > 60) # careful if matrix
+flu_hh[19,] # Problem
+which(flu_hh == 50, arr.ind=TRUE) # if want row and column
+which(flu_hh > 60, arr.ind=TRUE) # if want row and column
+```
+
+If statements allow you to compare elements:
+```{r results = "hide"}
+if( 2 > 3 ){print("World gone mad")} # Use for error checking. Print does exactly that - gives output into console
+```
+
+or check that data had been read in ok: 
+```{r results = "hide"}
+if( any(flu_hh$num_inf) < 0){print("Error: data has negative numbers")}
+```
+
+or check that what you are calling a proportion sums to 1:
+```{r results = "hide"}
+flu_hh$prop<-flu_hh$num_inf/sum(flu_hh$num_inf)
+if( sum(flu_hh$prop) != 1){print("Error: proportion sums to greater than 1")} # != means "does not equal"
+```
+
+If statements can be combined (as in Excel) with else statements. These can be simple:
+```{r results = "hide"}
+x <- -1
+sqrt(ifelse(x >= 0, x, NA)) 
+x = ifelse( mean(flu_hh$prop) > 0.5, max(flu_hh$prop), 0)
+```
+
+or more complex:
+```{r results = "hide"}
+if(max(flu_hh$time) < 30){ 
+  mean_flu_hh <- mean(flu_hh$num_inf)
+  print("< 30")
+}else{w<-which(flu_hh$time < 30) # Which are those < 30 days, most recent data perhaps
+      mean_flu_hh <- mean(flu_hh[w,"num_inf"]) # mean of only those values
+      print("> 30")
+}
+```
+
+Some useful commands in R to help with checking code such as the if/else statement above are
+
+INDENT: "command + I" on mac. highlight all code and enter. Helps find mistakes and lays out code nicely
+
+COMMENT: "command + C" on mac. As above but makes all commented. Useful if you want to comment out a load of code and run without temporarily
+
+
+## For loops
+
+For those of you who have coded before, you will know the importance of 'for' loops. For those who are new to coding, these structures are very useful in allowing you to repeat a set of commands multiple times to different elements. 
+
+For example, you can use 'for' loops to generate the two times table
+
+```{r results = "hide"}
+for (i in 1:10){ 
+  print(2*i)
+}
+```
+
+Or to fill a vector with the first 50 Fibonacci numbers:
+
+```{r results = "hide"}
+nf <- 50 # a number that we can then change easily that is used several times later. 
+# Tip: easier to put in one place than change multiple
+fibo <- matrix(0,1,nf) # Empty vector to fill
+fibo[1] = 0
+fibo[2] = 1
+for(i in 3:nf){
+  fibo[i]<-fibo[(i-2)] + fibo[i-1]
+  mm <- i / 2 # what will happen to mm over time? be careful not to overwrite things
+}
+plot(seq(1:nf),fibo,type="l")
+```
+
+In the above example, we built an empty vector to fill within the 'for' loop. However, we may not know the end size of the resulting vector and so in this case can instead concatenate:
+
+```{r results = "hide"}
+fibo <- c(0,1)
+for(i in 3:nf){
+  fibo <- c(fibo, fibo[(i-2)] + fibo[i-1])
+  print(length(fibo))
+}
+```
+
+## Writing your own functions
+
+Functions are useful ways of packaging up pieces of code. If you are going to do a set of commands multiple time then it can be simpler and cleaner to place them in a function that has been thoroughly checked and that you have not altered subsequently.
+
+To build a function you use the syntax
+
+```{r eval = FALSE}
+name_of_function <- function(inputs){ code }
+```
+
+Within the 'code' section you need to include the main coding information, which uses the inputs and also 'returns' an output. 
+
+For example, if Gwen were to build her own function for calculating the mean she might do:
+```{r results = "hide"}
+gwen_mean <- function(vector, times){
+  sum_vector <- sum(vector)
+  length_vector <- length(vector)
+  gwen_mean <- sum_vector / length_vector 
+  gwen_mean_power <- gwen_mean ^ times
+  return(list(gwen_mean = gwen_mean, gwen_mean_power = gwen_mean_power))
+}
+```
+
+To run the function you need the function name and the correct inputs:
+```{r results = "hide"}
+gwen_mean( c(1,2,3,43) , 3) # prints output
+gh_mean <- gwen_mean(c(1,2,3,43), 3)
+gh_mean
+```
+
+You can store all the functions that you have in one big .R file and load them into your current R file using the command 'source'. 
+
+Can you understand what the following function does? 
+```{r results = "hide"}
+find_day_many <- function(matrix){
+  u <- unique(matrix$ward) # What wards are there?
+  days <- c() # store in here
+  for(i in 1:length(u)){
+    w <- which(matrix$ward == u[i]) # find which rows of the data are for this ward
+    r <- which(matrix[w,"number"] > 1) # find which rows for this ward have more than 1 person
+    days <- c(days,matrix[w[r],"time"]) # when are there 2 or more infected? 
+  }
+  return(days)
+}
+```
+
+Does this give you the output you expected? 
+
+```{r echo = FALSE}
+curl_download("https://github.com/sbfnk/chennai-modelling/raw/master/data/ward_data.csv", destfile = "ward_data.csv")
+```
+
+```{r results = "hide"}
+wardd <- read.csv("ward_data.csv")
+d <- find_day_many(wardd)
+d
+```
+
+## Writing and solving ordinary differential equations
+In order to write and solve odes, you need to learng the basic syntax in R and load the package that we installed earlier (deSolve). Remember that to do this you need to type:
+```{r results = "hide"}
+library(deSolve) 
+```
+
+The package 'deSolve', includes a function 'ode' that solves ode equations. This function needs certain inputs. Have a look at
+```{r results = "hide"}
+?ode
+```
+and see if you can understand what the required inputs are. 
+
+For this part of the practical, we will build and solve out own SIR model. We will compare it to data and try to determine the correct parameters. 
+
+Firstly we need to read in the data, which is stored in "data_sir.csv". As before, download this from ?? and point R to the correct working directory where you have this data saved. Then you can type:
+
+```{r}
+curl_download("https://github.com/sbfnk/chennai-modelling/raw/master/data/data_sir.csv", destfile = "data_sir.csv")
+```
+
+```{r results = "hide"}
+data = read.csv("data_sir.csv") 
+```
+Can you make a simple plot to check what this SIR outbreak looks like? 
+
+As described in the help pages for 'ode', this function itself requires several inputs including another function. 
+
+The first input it requires are the initial conditions. We have to specify the initial conditions for all of the states. Here we have three states, S, I and R:
+```{r results = "hide"}
+init <- c(S = 0, I = 0, R = 0)
+```
+Can you alter this initial vector to have initially 1/100000 proportion of the population infected and the rest susceptible? 
+
+The second required input are the times over which the output for the ode is wanted. Note this is not the same as the timesteps over which the ode will be solved. These are specified by the method. Here lets assume lets say we want output every 1/2 a year for 10 years. 
+```{r results = "hide"}
+times <- seq(0, 70, by = 1) 
+```
+
+The third required input is the function itself, which governs the dynamics between the states. Here as we have an SIR model we can translate the differential equations into three simple relationships:
+```{r results = "hide"}
+sir <- function(time, state, parameters) { # {{Curly brackets indicate the beginning and end of functions}}
+  # This is the meat of the function - what happens to the parameters. Here it needs to be a list}}
+  with(as.list(c(state, parameters)), {
+    dS = -beta * S * I  ## The change in S 
+    dI = beta * S * I - gamma * I
+    dR = gamma * I
+    return(list(c(dS, dI, dR))) # {{"Return" as in "spit out" the values that you want}}
+  }) 
+} 
+```
+
+Finally, the ode requires the input parameters, which here are only the two beta and gamma:
+```{r results = "hide"}
+parameters <- c(beta = 1, gamma = 0.1)
+```
+
+In order to run the function we input all of the above and save the output in a vector called 'out':
+```{r}
+out <- ode(y = init,  func = sir, times = times, parms = parameters)
+head(out) 
+```
+What does the output data look like? Does it make sense? Can you build a simple plot to look at the change in the number Infected over time? 
+
+To look at all of the model output we can plot everything, including the data on the same graph. This requires us to use the "line" and "points" commands:
+```{r results = "hide"}
+plot(out[,"time"],out[,"S"],type="l",col="green",ylim=c(0,1),xlab="Time",ylab="Proportion")
+lines(out[,"time"],out[,"I"],col="red")
+lines(out[,"time"],out[,"R"],col="blue")
+legend(30, 0.7, c("Susceptibles", "Infecteds", "Recovereds"), lty = 1, col = 2:4) # Add legend and specific position
+# Compare to the data - plot this data on the same graph
+points(data[,1],data[,2])
+```
+
+Does this match the data well? Given that you know that the value for 'beta' is 1.3, can you write a function that considers a range of different parameters for 'gamma', runs the model with these various values and then plots the outcomes with the data? From this what is the best estimate you can get for 'gamma'? 
+
+```{r results = "hide"}
+
+#*************************************************************** Writing and solving odes
+#### Basic script to run SIR model 
+
+
+# {{Seq build a vector for you - many ways to build vectors!}}
+
+# Run the function using "ode", a function from the library we loaded earlier
+## Plot all on the same axes
+
+### Run for many values of gamma
+gamma_values = seq(0.1,0.9,0.1) # vector of possible gamma values
+store_I = matrix(0,length(gamma_values) * length(times) ,3) ### Empty vector where we will store the output
+
+# Run through and solve with each gamma value
+for(i in 1:length(gamma_values)){ # Length = how many entries in vector
+  # What gamma value in this run? 
+  gamma_new = gamma_values[i]
+  # New parameter set
+  parameters = c(beta = 1.4247, gamma = gamma_new)
+  # Run with this new parameter set
+  out <- ode(y = init, times = times, func = sir, parms = parameters)
+  # Store the number of infecteds this produces
+  stored = cbind(out[,"time"],out[,"I"],gamma_new) # Bind the columns with time, the infected and the new gamma
+  stored2 = cbind(out[,1],out[,3],gamma_new) # Bind the columns with time, the infected and the new gamma
+  store_I[((i-1)*length(times)+1):(i*length(times)),]=stored # Binds them to the old data
+}
+# Have a look at what you have...(again wouldn't usually include this in the saved R code)
+head(store_I)
+colnames(store_I)<-c("Time","Infecteds","gamma_new")
+
+# Plot! 
+plot(store_I[,"Time"],store_I[,"Infecteds"],type="l",xlab="Time",ylab="Proportion")
+points(data[,1],data[,2]) # compare visually to data
+
+# Store the hard earned data somewhere so you don't have to run it again
+```
+
+```{r eval = FALSE}
+setwd(home) # Where do you want to store it? maybe have a "store" folder? 
+write.csv(store_I,"store_changing_gamma.csv") # What you want to save and then the name to give the file
+
+```

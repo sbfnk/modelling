@@ -3,7 +3,7 @@ html_document:
   theme: spacelab
   highlight: pygments
   smart: false
-  css: mfiidd.css
+  css: chennai.css
   fig_width: 5
   fig_height: 5
   fig_caption: yes

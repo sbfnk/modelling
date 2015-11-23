@@ -1,5 +1,9 @@
 *.html
 .Rhistory
 .Rdata
+*.pdf
+*.csv
+*.jpg
+*.txt
 
 gh-pages/

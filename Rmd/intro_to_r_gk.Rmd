@@ -98,8 +98,8 @@ Can you generate a matrix of size 5 x 10, filled with 2s except for the first co
 
 Simple commands such as 'sum' are already encoded in R.
 ```{r results = "hide", eval = FALSE}
-total = sum(m)
-proportions_m = m / total
+total <- sum(m)
+proportions_m <- m / total
 sum(proportions_m) # Check = should be 1
 ```
 
@@ -204,8 +204,8 @@ time_max_prop <- flu_hh[which(flu_hh[,"num_inf"]==max_num),"time"]
 To add another column to a `data.frame` you simply refer to the name of this new column and assign it to have certain values. For example, to add in a column of percentages:
 
 ```{r results = "hide"}
-sum = sum(flu_hh[,"num_inf"])
-flu_hh$perc = 100 * flu_hh$num_inf / sum
+sum <- sum(flu_hh[,"num_inf"])
+flu_hh$perc <- 100 * flu_hh$num_inf / sum
 sum(flu_hh$perc) # check = 100
 ```
 
@@ -290,7 +290,7 @@ If statements can be combined (as in Excel) with else statements. These can be s
 ```{r results = "hide"}
 x <- -1
 sqrt(ifelse(x >= 0, x, NA))  # Only take the square root if x is positive
-x = ifelse( mean(flu_hh$prop) > 0.5, max(flu_hh$prop), 0) # only assign a maximum to x if it is bigger than 0.5
+x <- ifelse( mean(flu_hh$prop) > 0.5, max(flu_hh$prop), 0) # only assign a maximum to x if it is bigger than 0.5
 ```
 
 or more complex:
@@ -329,8 +329,8 @@ Or to fill a vector with the first 50 Fibonacci numbers:
 nf <- 50 # a number that we can then change easily that is used several times later. 
 # Tip: easier to put in one place than change multiple
 fibo <- matrix(0,1,nf) # Empty vector to fill
-fibo[1] = 0
-fibo[2] = 1
+fibo[1] <- 0
+fibo[2] <- 1
 for(i in 3:nf){
   fibo[i]<-fibo[(i-2)] + fibo[i-1]
   mm <- i / 2 # what will happen to mm over time? be careful not to overwrite things
@@ -406,7 +406,7 @@ d <- find_day_many(wardd)
 d
 ```
 
-## Writing and solving ordinary differential equations
+# Writing and solving ordinary differential equations
 In order to write and solve ODEs, you need to learng the basic `ode` syntax in R and load the package that we installed earlier (`deSolve`). Remember that to do this you need to type:
 ```{r results = "hide"}
 library(deSolve) 
@@ -501,19 +501,19 @@ The solution to the code is below, but try not to look at this before having a g
 
 ```{r results = "hide"}
 ### Run for many values of gamma
-gamma_values = seq(0.2,0.8,0.1) # vector of possible gamma values
-store_I = matrix(0,length(gamma_values) * length(times) ,3) ### Empty vector where we will store the output
+gamma_values <- seq(0.2,0.8,0.1) # vector of possible gamma values
+store_I <- matrix(0,length(gamma_values) * length(times) ,3) ### Empty vector where we will store the output
 
 # Run through and solve with each gamma value
 for(i in 1:length(gamma_values)){ # Length = how many entries in vector
   # What gamma value in this run? 
-  gamma_new = gamma_values[i]
+  gamma_new <- gamma_values[i]
   # New parameter set
-  parameters = c(beta = 2/100000, gamma = gamma_new)
+  parameters <- c(beta = 2/100000, gamma = gamma_new)
   # Run with this new parameter set
   out <- ode(y = init, times = times, func = sir, parms = parameters)
   # Store the number of infecteds this produces
-  stored = cbind(out[,"time"],out[,"I"],gamma_new) # Bind the columns with time, the infected and the new gamma
+  stored <- cbind(out[,"time"],out[,"I"],gamma_new) # Bind the columns with time, the infected and the new gamma
   store_I[((i-1)*length(times)+1):(i*length(times)),]=stored # Store in the big matrix 
 }
 # Have a look at what you have...(again wouldn't usually include this in the saved R code)
@@ -533,7 +533,9 @@ setwd(home) # Where do you want to store it? maybe have a "store" folder?
 write.csv(store_I,"store_changing_gamma.csv") # What you want to save and then the name to give the file
 ```
 
-## Going further: the SIR model with births and deaths
+# Going further
+
+## The SIR model with births and deaths
 
 In the lecture yesterday, you saw the infection cycles that occur when you use an SIR model with births and deaths. If you have gotten this far, try to build and solve using ode, your own version of this SIR model with births and deaths. 
 
@@ -545,6 +547,6 @@ $$\frac{dS}{dt} = - \beta \frac{I}{N} S + \nu N - \mu S \\
 Initial parameters from the lecture were:
 $$ \beta = 500, \gamma = 50, \nu = 0.02 $$.
 
-## Going even further: extending the SIR model
+## Extending the SIR model
 
 If you have time, you can now try to build more complex versions of the SIR model to match the infectious disease you are interested in. For example, you could try and include multiple strains of influenza or extend the model to include some of the complexity of TB. The first stage would be to sketch the model structure on paper. Remember that simplicity is the key and that you will need data to inform any parameter values. Secondly, translate the model structure into differential equations. Thirdly, translate the differential equations into a new function to use in the ode solver function. 

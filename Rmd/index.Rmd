@@ -12,7 +12,7 @@ Part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~si
 * [R](http://cran.r-project.org) is used as the main programming language. Please install at least version: R-3.2.0.
 * [RStudio](http://www.rstudio.com/products/rstudio/download/) (optional) is a popular graphic user interface (GUI).
 
-## Practical sessions
+## Lab sessions
 
 1. [R Introduction](intro_to_r_gk.html)
 

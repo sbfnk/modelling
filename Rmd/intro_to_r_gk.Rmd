@@ -94,7 +94,7 @@ m[,1]<-c(2,3,9,12) # Assign column 1
 m[,2]<-v # Assign column 2 to be the vector we had earlier
 ```
 
-Can you generate a matrix of size 5 x 10, filled with 2s except for the first column that has the sequence 1 to 10? 
+Can you generate a matrix of size 10 x 5, filled with 2s except for the first column that has the sequence 1 to 10? 
 
 Simple commands such as 'sum' are already encoded in R.
 ```{r results = "hide", eval = FALSE}

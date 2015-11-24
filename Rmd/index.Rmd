@@ -1,9 +1,10 @@
 ---
 title: "Introduction to infectious disease modelling"
-output:
-  html_document:
-    self_contained: true 
 ---
+
+Welcome to the webpage for the 2015 Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India. Below you will find everything that is needed for the lab practical sessions. 
+
+The authors of this webpage are Sebastian Funk, Gwen Knight and Anton Camacho. 
 
 ## Required software
 * [R](http://cran.r-project.org) is used as the main programming language. Please install at least version: R-3.2.0.

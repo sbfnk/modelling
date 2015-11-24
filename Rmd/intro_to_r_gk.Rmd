@@ -12,19 +12,19 @@ knitr::opts_chunk$set(fig.cap='', fig.align="center", message=FALSE, tidy=TRUE, 
 
 # Objectives
 The aim of this session is to introduce you to the basics of coding within R. 
-To do this, we will introduce you to the basic syntax, via the use of some simple commands such as how to read in data and plot. We will end with the introduction to methods for ode solving in R. 
+To do this, we will introduce you to the basic syntax, via the use of some simple commands such as how to read in data and plot. We will end with the introduction to methods for ODE solving in R. 
 
 In this session, you will
 
 1. familiarise yourself with the basic syntax of R
 2. learn how to create basic plots in R
-3. solve an SIR model in R
+3. simulate an SIR model in R
 4. adapt an SIR model to include births and deaths, producing cycles
 
 
 The best thing to do is to read each section and type (or copy and paste) the R commands (in grey boxes) into your own R session to check that you understand the code. All the data to download is in the [github repository](https://github.com/sbfnk/chennai-modelling/tree/master/data) (links to download any data files are given below when you are supposed to load them). 
 
-You can either work in a single R window, or use the user friendly interface RStudio, which allows you to have your saved R code, separate to your executed commands. It also holds the plot, environment and history window. Using RStudio you  can keep your model code (a 'file.R') separate to your executed code in the Console window. In this 'file.R' you can store the useful and checked code for future use. For example, you could start a new R file and store in it all the commands below.   
+You can either work in a single R window, or use the user friendly interface RStudio, which allows you to have your saved R code, separate to your executed commands. It also holds the plot, environment and history window. Using RStudio you can keep your model code (in a file called 'file.R', where you can replace 'file' with any name you like) separate to your executed code in the Console window. In this 'file.R' you can store the useful and checked code for future use. For example, you could start a new R file and store in it all the commands below.   
 
 # Basic syntax
 
@@ -55,7 +55,14 @@ setwd("~/Imperial/Chennai_workshop/")
 You can also label this working directory as 'home', and have other locations stored for plotting or for getting data. For example
 
 ```{r results = "hide", eval = FALSE}
-home <- "~/Imperial/Chennai_workshop/"
+home <- "~/Imperial/Chennai_workshop/" ## on a OS X
+setwd(home)
+```
+
+or
+
+```{r results = "hide", eval = FALSE}
+home <- "C:\\Documents\\Chennai_workshop\\" ## on windows
 setwd(home)
 ```
 
@@ -148,7 +155,7 @@ library(deSolve) # load in the deSolve library of functions
 
 ## Reading in data
 
-In order to read in data, the first thing to do is to check that you are pointing R at the right folder by setting the appropriate working directory. To do this make sure you `setwd(where_the_data_is)`.
+In order to read in data, the first thing to do is to check that you are pointing R at the right folder by setting the appropriate working directory. To do this make sure you `setwd(where_the_data_is)`, to point R to wherever you have decided to store your files.
 
 For this practical, you will first need to download the required data from (in [CSV format](https://en.wikipedia.org/wiki/Comma-separated_values)) from [here](https://github.com/sbfnk/chennai-modelling/raw/master/data/data.csv). Save it in the correct folder and make this your current working directory. 
 
@@ -184,7 +191,7 @@ times           # All the times
 times[2]        # The second time
 ```
 
-How would you go about finding the maximum time in this data? At what time is the number of cases maximum? See if you can write code to do this yourself. To do this you may need to use the function `which` that searches for the location of matching values. The answers to this are below.
+How would you go about finding the maximum time in this data? At what time is the number of cases at its maximum? See if you can write code to do this yourself. To do this you may need to use the function `which` that searches for the location of matching values. The solution to this task is below.
 
 ```{r results = "hide", eval = FALSE,tidy = FALSE}
 ?maximum # Is there a command called maximum?
@@ -223,7 +230,7 @@ plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red") # Red line
 plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red",xlab="Time",ylab="Number") # Label axis
 ```
 
-You can also alter the size of the axis to focus on certain areas. This use the `max_prop` from above to focus on the increase in the outbreak only.
+You can also alter the size of the axis to focus on certain areas. For example, use the `max_prop` from above to focus on the increase in the outbreak only.
 
 ```{r results = "hide"}
 plot(flu_hh[,"time"],flu_hh[,"num_inf"],type="l",col="red",xlab="Time",ylab="Number",xlim=c(0,time_max_prop)) 
@@ -272,7 +279,7 @@ which(flu_hh == 50, arr.ind=TRUE) # if want row and column
 which(flu_hh > 60, arr.ind=TRUE) # if want row and column
 ```
 
-If statements allow you to compare elements:
+`if` statements allow you to compare elements
 ```{r results = "hide"}
 if( 2 > 3 ){print("World gone mad")} # Use for error checking. Print does exactly that - gives output into console
 ```
@@ -288,7 +295,7 @@ flu_hh$prop<-flu_hh$num_inf/sum(flu_hh$num_inf)
 if( sum(flu_hh$prop) != 1){print("Error: proportion sums to greater than 1")} # != means "does not equal"
 ```
 
-If statements can be combined (as in Excel) with else statements. These can be simple:
+`if` statements can be combined (as in Excel) with else statements. These can be simple:
 ```{r results = "hide"}
 x <- -1
 sqrt(ifelse(x >= 0, x, NA))  # Only take the square root if x is positive
@@ -396,7 +403,7 @@ find_day_many <- function(matrix){
 }
 ```
 
-Does this give you the output you expected? You will need to use some of the commands for looking at data that were introduced above. The file `ward.csv` can be found [here](https://github.com/sbfnk/chennai-modelling/raw/master/data/ward_data.csv).
+Does this give you the output you expected? You will need to use some of the commands for looking at data that were introduced above. The file `ward_data.csv` can be found [here](https://github.com/sbfnk/chennai-modelling/raw/master/data/ward_data.csv).
 
 ```{r echo = FALSE}
 curl_download("https://github.com/sbfnk/chennai-modelling/raw/master/data/ward_data.csv", destfile = "ward_data.csv")
@@ -424,12 +431,12 @@ For this part of the practical, we will build and solve our own SIR model. We wi
 
 Firstly we need to read in the data, which is stored in "data_sir.csv". As before, download this from [here](https://github.com/sbfnk/chennai-modelling/raw/master/data/data_sir.csv) and point R to the correct working directory where you have this data saved. Then you can type:
 
-```{r}
+```{r echo = FALSE}
 curl_download("https://github.com/sbfnk/chennai-modelling/raw/master/data/data_sir.csv", destfile = "data_sir.csv")
 ```
 
 ```{r results = "hide"}
-data = read.csv("data_sir.csv") 
+data <- read.csv("data_sir.csv") 
 ```
 Can you make a simple plot to check what this SIR outbreak looks like? 
 
@@ -451,7 +458,7 @@ The third required input is the function itself, which governs the dynamics betw
 sir <- function(time, state, parameters) { # {{Curly brackets indicate the beginning and end of functions}}
   # This is the meat of the function - what happens to the parameters. Here it needs to be a list}}
   with(as.list(c(state, parameters)), {
-    dS = -beta * S * I  ## The change in S 
+    dS = -beta * S * I  # The change in S 
     dI = beta * S * I - gamma * I
     dR = gamma * I
     return(list(c(dS, dI, dR))) # {{"Return" as in "spit out" the values that you want}}
@@ -459,13 +466,13 @@ sir <- function(time, state, parameters) { # {{Curly brackets indicate the begin
 } 
 ```
 
-Finally, the `ode` function requires the input parameters, which here are only the two beta and gamma:
+Finally, the `ode` function requires the input parameters, which here are only beta and gamma:
 ```{r results = "hide"}
 parameters <- c(beta = 2/100000, gamma = 0.5)
 ```
 
 In order to run the function we input all of the above and save the output in a vector called `out`:
-```{r}
+```{r results = "hide"}
 init <- c(S = 100000 - 1, I = 1, R = 0)
 out <- ode(y = init,  func = sir, times = times, parms = parameters)
 head(out) 
@@ -480,7 +487,7 @@ lines(out[,"time"],out[,"R"],col="blue",lwd = 10)
 legend(25, 40000, c("Susceptibles", "Infecteds", "Recovereds"), lwd = 10, lty = 1, col = 2:4) # Add legend and specific position
 ```
 
-Does this match the data well? Note, that the data given is the proportions infected over time. So in order to compare you either need to convert the data to numbers or the numbers to data. Try and do this, and plot the data and model output on the same graph. A solution is given below if you get stuck. 
+Does this match the data you read before in using `read.csv` well? Note, that the data given is the proportions infected over time. So in order to compare you either need to convert the data to numbers or the numbers to data. Try and do this, and plot the data and model output on the same graph. A solution is given below if you get stuck. 
 
 What we are doing here is assessing our model's "fit" to the data. This is a key stage in the development of any model - does it refect reality? The simplest way to do this is by plotting model output and data together and comparing them by eye. Over the next few days, we will introduce several more formal and quantitative methods for assessing a model "fit".  
 
@@ -494,7 +501,7 @@ legend(25, 80000, c("Susceptibles", "Infecteds", "Recovereds"), lwd = 5, lty = 1
 points(data$time,data$number)
 ```
 
-Given that you know that the value for `beta` is 2/100000, can you write a function that considers a range of different parameters for `gamma`, runs the model with these various values and then plots the outcomes with the data? From this what is the best estimate you can get for `gamma`? 
+Assume you know that the value for `beta` is 2/100000. Can you write a function that considers a range of different parameters for `gamma`, runs the model with these various values and then plots the outcomes with the data? From this what is the best estimate you can get for `gamma`? 
 
 Note that this was output generated with a set value for gamma and so you can find a solution - however in the real world epidemic there is unlikely to be such a perfect fit! 
 
@@ -502,7 +509,7 @@ The solution to the code is below, but try not to look at this before having a g
 
 
 ```{r results = "hide"}
-### Run for many values of gamma
+# Run for many values of gamma
 gamma_values <- seq(0.2,0.8,0.1) # vector of possible gamma values
 store_I <- matrix(0,length(gamma_values) * length(times) ,3) ### Empty vector where we will store the output
 

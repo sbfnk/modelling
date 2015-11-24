@@ -5,5 +5,7 @@
 *.csv
 *.jpg
 *.txt
+*.sublime-project
+*.sublime-workspace
 
 gh-pages/

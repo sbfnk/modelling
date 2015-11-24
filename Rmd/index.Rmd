@@ -2,7 +2,8 @@
 title: "Introduction to infectious disease modelling"
 output:
   html_document:
-    self_contained: true 
+    self_contained: true
+    toc: false  
 ---
 
 Part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/) in Chennai, India, 23-28 November, 2015.
@@ -15,4 +16,6 @@ Part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~si
 
 1. [R Introduction](intro_to_r_gk.html)
 
+## Lecture Slides
 
+[An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf)

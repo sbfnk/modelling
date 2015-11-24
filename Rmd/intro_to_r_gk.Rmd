@@ -211,7 +211,9 @@ sum(flu_hh$perc) # check = 100
 
 ## Basic plotting
 
-R has inbuilt useful functions for creating plots. Again, copy and paste the below and check the differences in the output. 
+R has inbuilt useful functions for creating plots. Again, copy and paste the below and check the differences in the output. The command `plot` creates a new plot window which can then be added to using `lines` or `points`. By default `plot` will create a plot with points, to alter this use the `type="l"` command as shown below. 
+
+
 ```{r results = "hide"}
 plot(flu_hh[,1],flu_hh[,2]) # Points
 plot(flu_hh[,"time"],flu_hh[,"num_inf"]) # Points
@@ -439,7 +441,7 @@ init <- c(S = 0, I = 0, R = 0)
 ```
 Can you alter this initial vector for a population of 100,000 to have initially one infected and the rest susceptible? 
 
-The second required input are the times over which the output for the ODE is wanted. Note this is not the same as the timesteps over which the ODE will be solved. These are specified by the method. Here lets assume lets say we want output every 1/2 a year for 10 years. 
+The second required input are the times over which the output for the ODE is wanted. Note this is not the same as the timesteps over which the ODE will be solved. These are specified by the method. Here lets assume lets say we want output every year for 40 years. 
 ```{r results = "hide"}
 times <- seq(0, 40, by = 1) 
 ```
@@ -546,6 +548,8 @@ $$\frac{dS}{dt} = - \beta \frac{I}{N} S + \nu N - \mu S \\
 
 Initial parameters from the lecture were:
 $$ \beta = 500, \gamma = 50, \nu = 0.02 $$.
+
+Remember that the population size should stay constant, at say 1,000. 
 
 ## Extending the SIR model
 

@@ -1,0 +1,33 @@
+% Deterministic SEITL model
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(cache=TRUE, fig.path='figure/SEITL_deter/', cache.path='cache/SEITL_deter/' , fig.cap='', fig.align="center", message=FALSE, tidy=TRUE, warning=FALSE)
+```
+
+The SEITL model can be described with five states (S, E, I, T and L) and five parameters:
+
+1. basic reproductive number ($R_0$)
+2. latent period ($D_\mathrm{lat}$)
+3. infectious period ($D_\mathrm{inf}$)
+4. temporary-immune period ($D_\mathrm{imm}$)
+5. probability of developing a long-term protection ($\alpha$).
+
+and the following deterministic equations:
+
+$$
+\begin{cases}
+\begin{aligned}
+\frac{dS}{dt} &= - \beta S \frac{I}{N} + (1-\alpha) \tau T\\
+\frac{dE}{dt} &= \beta S \frac{I}{N} - \epsilon E\\
+\frac{dI}{dt} &= \epsilon E - \nu I\\
+\frac{dT}{dt} &= \nu I - \tau T\\
+\frac{dL}{dt} &= \alpha \tau T\\
+\end{aligned}
+\end{cases}
+$$
+
+where $\beta=R_0/D_\mathrm{inf}$, $\epsilon=1/D_\mathrm{lat}$, $\nu = 1/D_\mathrm{inf}$, $\tau=1/D_\mathrm{imm}$ and $N = S + E + I + L + T$ is constant. 
+
+As you saw in the lecture, __there is an analogy between the deterministic equations and the algorithm that performs stochastic simulations of the model__. In that sense, the deterministic equations are a description of the stochastic model, too.
+
+You can now return to the [practical session](code_sto_model.html#design-your-favourite-model) and design the flowchart of the SEITL model. If you need more help, you can check [our solution](SEITL_flowchart.html) (note that this is one among several possible solutions).

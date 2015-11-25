@@ -1,0 +1,45 @@
+% Partial solution for SEITL model
+
+
+Here is a skeleton for the list of transitions and the function that returns the rates. You should write one line of code every where it is indicated.
+
+```{r partial_solution}
+
+SEITL_transitions <- list(
+	# fill transition for infection
+	# fill transition for onset of infectiousness
+	# fill transition for recovery + temporary immunity
+	# fill transition for long-term immunity
+	# fill transition for NO long-term immunity
+	)
+
+SEITL_rateFunc <- function(state, theta, t) {
+
+	# define model parameters in term of the natural parameters
+	beta <- # fill HERE
+	epsilon <- # fill HERE
+	nu <- # fill HERE
+	alpha <- # fill HERE
+	tau <- # fill HERE
+	
+	# create temporary variables for states to simplify the writing of the rates below
+	S <- state[["S"]]
+	E <- state[["E"]]
+	I <- state[["I"]]
+	T <- state[["T"]]
+	L <- state[["L"]]
+	N <- # fill HERE
+	
+	# return rates
+	return(c(
+		# fill rate for infection
+		# fill rate for onset of infectiousness
+		# rfill rate for ecovery + temporary immunity
+		# fill rate for long-term immunity
+		# fill rate for NO long-term immunity
+		))
+}
+
+```
+
+Once you have filled the gap you can come back to the [practical](code_sto_model.html#simulate-plot-stochastic-epidemics). If you need more help in filling the gap, you can have a look at the [solution](SEITL_implement_full.html).

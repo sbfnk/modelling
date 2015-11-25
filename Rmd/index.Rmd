@@ -1,20 +1,13 @@
 ---
 title: "Introduction to infectious disease modelling"
-<<<<<<< HEAD
----
-
-Welcome to the webpage for the 2015 Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India. Below you will find everything that is needed for the lab practical sessions. 
-
-The authors of this webpage are Sebastian Funk, Gwen Knight and Anton Camacho. 
-=======
+author: by Sebastian Funk, Gwen Knight and Anton Camacho
 output:
   html_document:
-    self_contained: true
     toc: false  
 ---
 
-Part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/) in Chennai, India, 23-28 November, 2015.
->>>>>>> FETCH_HEAD
+Welcome to the Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India, part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/), 23-28 November, 2015. Below you will find everything that is needed for the lab practical sessions, as well as the slides from our lectures.
+
 
 ## Required software
 * [R](http://cran.r-project.org) is used as the main programming language. Please install at least version: R-3.2.0.
@@ -23,10 +16,14 @@ Part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~si
 ## Lab sessions
 
 1. [R Introduction](intro_to_r_gk.html)
+2. [Code a stochastic model](code_sto_model.html)
+3. [My first fitmodel](my_first_fitmodel.html)
 
 ## Lecture Slides
 
-[An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf)
+* [An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf)
 
-[Why do we model infectious diseases? Policy and practicalities](interventions.pptx)
+* [Introduction to stochastic modelling](intro_sto_modelling.pdf)
+
+* [Why do we model infectious diseases? Policy and practicalities](interventions.pptx)
 

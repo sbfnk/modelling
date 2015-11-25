@@ -1,0 +1,146 @@
+% Code your first stochastic model.
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(cache=TRUE, fig.path='figure/code_sto_model/', cache.path='cache/code_sto_model/' , fig.cap='', fig.align="center", message=FALSE, tidy=TRUE, warning=FALSE)
+```
+
+```{r load, include=FALSE, cache=FALSE}
+set.seed(1234)
+```
+
+# Objectives
+
+* Design your favourite model with pen & paper.
+* Write down a table with all transitions and jump intensities for this model.
+* Implement the model in `R` using the package `adaptivetau`
+* Simulate and plot stochastic trajectories to investigate on the dynamics of your model.
+
+# Design your favourite model
+
+Using only pen & paper, design a compartmental model with boxes and arrows. You can design either:
+
+* A model you would like to work with for a particular disease in your research. In this case, try to choose one not too complicated, say with less than 10 compartments, otherwise it will be tricky to debug.
+* The SEITL model, which is one of the 5 models used to analyse the two-wave flu outbreak in Tristan da Cunha. You can use the information provided in [this page](SEITL_model.html) to design the SEITL model.
+
+__Include labels for the rates of flow between compartments and define all the symbols and parameters you use. You should also give a brief description of what the model does as well as some guess values for the parameters and initial conditions.__
+
+# Write the transition table
+
+Once you have designed your model, write down the associated transition table. The table should contain 3 columns:
+
+* __Event__: describe the type of transition (e.g. infection)
+* __Transition__: change in the state vector corresponding to the transition (e.g. $(s, i, r)\to(s-1, i+1, r)$)
+* __Jump intensity__: intensity at which the transition occur (e.g. $\beta si/N$)
+
+# Implement the model in `R`
+
+The adaptivetau package can be installed with 
+
+```{r install_adaptivetau, eval = FALSE}
+install.packages("adaptivetau")
+```
+Once installed, it is loaded with
+
+```{r load_adaptivetau}
+library(adaptivetau)
+```
+
+The `adaptivetau` package uses a different syntax from the `deSolve` package. Instead of providing a function to calculate the rates of change at each time point, one specifies a list of transitions and their rates (jump intensities). Examples for how this is done can be found in the [adaptivetau vignette](https://cran.r-project.org/web/packages/adaptivetau/vignettes/adaptivetau.pdf).
+
+For the SIR model, we could write
+
+```{r SIR_adaptivetau, tidy = FALSE}
+
+SIR_transitions <- list(
+	c(S = -1, I = 1), # infection
+	c(I = -1, R = 1) # recovery
+	)
+
+SIR_rateFunc <- function(x, parameters, t) {
+	
+	# define model parameters in term of the natural parameters
+	beta <- parameters["R0"]/parameters["D_inf"] 
+	nu <- 1/parameters["D_inf"]
+
+	# create temporary variables for states to simplify the writing of the rates below
+	S <- x["S"] 
+	I <- x["I"] 
+	R <- x["R"]
+	N <- S + I + R
+	
+	# return rates
+	return(c(
+		beta * S * I / N, # infection 
+		nu * I # recovery
+		)) 
+}
+```
+
+__You can now re-use and modify the code of the SIR model to implement your model in `R`.__ If you chose the SEITL model and you need more help, you can use and complete this [partial solution](SEITL_implement_partial.html).
+
+# Simulate & plot stochastic epidemics
+
+To run the stochastic model, we then use the `ssa.adaptivetau` function, which takes a vector of initial conditions, the list of transitions and rate function, a named vector of parameters, and the final time (with simulations starting at time 0).
+
+```{r SIR_simulate}
+
+parameters <- c(R0 = 5, D_inf = 1)
+run <- ssa.adaptivetau(init.values = c(S = 999, I = 1, R = 0), transitions = SIR_transitions, rateFunc = SIR_rateFunc, params = parameters, tf = 10)
+head(run)
+
+```
+
+The simplest way to plot the trajectories is using `plot`. To plot the output of the stochastic SIR run above, we first convert it to a data frame (`ssa.adaptivetau` returns a matrix) using `data.frame`
+
+```{r convert}
+
+run_df <- data.frame(run)
+
+```
+
+We can then plot the number of infected against time using
+
+```{r plot}
+
+plot(x = run_df$time, y = run_df$I, type = "line")
+
+```
+
+# Going further
+
+## Observation time
+Unlike the function `ode` from the `deSolve` package, `ssa.adaptivetau` does not produce output at specific times, but every time an event happens. However, in reality, we observe epidemics at specific times, for instance once per day.
+
+To get the output at chosen times, we can use `approx`:
+
+```{r approx}
+
+# get output at days 1, 2, ... , 10
+run_I_times <- approx(x = run_df$time, y = run_df$I, xout = 1:10, method = "constant")
+
+print(run_I_times)
+
+```
+
+__Write a function that will apply the `approx` function to all the variables returned by `ssa.adaptivetau` and construct a data frame with model output at the desired times.__
+
+## Computing incidence
+
+The Tristan da Cunha dataset correspond to daily incidence (number of new cases infected per day) rather than prevalence (number of cases infected over time). To obtain the daily incidence, we need to create a $6^\mathrm{th}$ state variable - called $\mathrm{Inc}$ - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we need to modify the transition corresponding to the onset of infectiousness: 
+
+$$
+(s, e, i, t, l, inc)\to(s, e-1, i+1, t, l, inc+1)
+$$
+
+__Modify your stochastic model to include this new transition and retrieve the daily incidence from the output of `ssa.adaptivetau`.__
+
+
+
+
+<div>
+# Navigate
+Top: [Index](index.html) Previous: [R introduction](intro_to_r_gk.html) Next: [My first fitmodel](my_first_fitmodel.html)
+</div>
+
+
+

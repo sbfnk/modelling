@@ -1,0 +1,13 @@
+% Transition table for SEITL model
+
+
+|Event | Transition | Jump intensity|
+|------------------------|------------|---------------|
+|Infection | $(s,e,i,t,l) \to (s-1,e+1,i,t,l)$ | $\beta si/N$|
+|Onset of infectiousness | $(s,e,i,t,l) \to (s,e-1,i+1,t,l)$ | $\epsilon e$|
+|Recovery and onset of temporary immunity | $(s,e,i,t,l) \to (s,e,i-1,t+1,l)$ | $\nu i$|
+|Onset of long-term immunity | $(s,e,i,t,l) \to (s,e,i,t-1,l+1)$ | $\alpha \tau t$|
+|Defficient long-term immunity | $(s,e,i,t,l) \to (s+1,e,i,t-1,l)$ | $(1-\alpha) \tau t$|
+
+
+Now you can come back to the [practical](code_sto_model.html#implement-the-model-in-r).

@@ -32,6 +32,8 @@ Once you have designed your model, write down the associated transition table. T
 * __Transition__: change in the state vector corresponding to the transition (e.g. $(s, i, r)\to(s-1, i+1, r)$)
 * __Jump intensity__: intensity at which the transition occur (e.g. $\beta si/N$)
 
+If you chose the SEITL model you check your table with [our solution](SEITL_transition_table.html).
+
 # Implement the model in `R`
 
 The adaptivetau package can be installed with 
@@ -106,10 +108,12 @@ plot(x = run_df$time, y = run_df$I, type = "line")
 
 ```
 
+__Spend some time playing with your stochastic model by changing the parameter values and see how it affects the epidemic. In particular, try a value of $R_0$ just above 1 to see the early stochastic extinction.__
+
 # Going further
 
 ## Observation time
-Unlike the function `ode` from the `deSolve` package, `ssa.adaptivetau` does not produce output at specific times, but every time an event happens. However, in reality, we observe epidemics at specific times, for instance once per day.
+Unlike the function `ode` from the `deSolve` package, `ssa.adaptivetau` does not produce output at specific times, but every time an event happens. However, in reality, we observe epidemics at specific points in time, for instance once per day.
 
 To get the output at chosen times, we can use `approx`:
 
@@ -126,15 +130,15 @@ __Write a function that will apply the `approx` function to all the variables re
 
 ## Computing incidence
 
-The Tristan da Cunha dataset correspond to daily incidence (number of new cases infected per day) rather than prevalence (number of cases infected over time). To obtain the daily incidence, we need to create a $6^\mathrm{th}$ state variable - called $\mathrm{Inc}$ - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we need to modify the transition corresponding to the onset of infectiousness: 
+You may have noticed that the Tristan da Cunha epidemic dataset corresponds to daily incidence (number of new cases infected per day) rather than prevalence (number of cases infected over time). This is a common feature of epidemiological data: it is much easier to report new cases as they present to their doctor than counting the number of cases currently infected on a given day. 
+
+The compartemental model gives prevalence rather than incidence. To obtain the daily incidence from our model, we need to create a $6^\mathrm{th}$ state variable - called $\mathrm{Inc}$ - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we need to modify the transition corresponding to the onset of infectiousness in the SEITL model: 
 
 $$
 (s, e, i, t, l, inc)\to(s, e-1, i+1, t, l, inc+1)
 $$
 
-__Modify your stochastic model to include this new transition and retrieve the daily incidence from the output of `ssa.adaptivetau`.__
-
-
+__Modify your stochastic model to include this new transition and retrieve the daily incidence from the output of `ssa.adaptivetau`. You will have to also make use of the function `diff`, which computes the difference between two consecutive values of a vector__
 
 
 <div>

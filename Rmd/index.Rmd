@@ -17,6 +17,7 @@ Welcome to the Modelling Infectious Diseases course at The Institute of Mathemat
 
 1. [R Introduction](intro_to_r_gk.html)
 2. [Code a stochastic model](code_sto_model.html)
+3. [My first fitmodel](my_first_fitmodel.html)
 
 ## Lecture Slides
 

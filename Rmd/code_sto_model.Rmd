@@ -122,21 +122,24 @@ print(run_I_times)
 
 ```
 
-If needed, one can applies this to all the variables returned by `ssa.adaptivetau` and construct a data frame with model output at the desired times.
+__Write a function that will apply the `approx` function to all the variables returned by `ssa.adaptivetau` and construct a data frame with model output at the desired times.__
 
 ## Computing incidence
 
-In order to fit the SEITL model to the Tristan da Cunha dataset we need to add one state variable and one parameter to the model:
+The Tristan da Cunha dataset correspond to daily incidence (number of new cases infected per day) rather than prevalence (number of cases infected over time). To obtain the daily incidence, we need to create a $6^\mathrm{th}$ state variable - called $\mathrm{Inc}$ - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we need to modify the transition corresponding to the onset of infectiousness: 
 
-* __The dataset represents daily incidence counts:__ we need to create a $6^\mathrm{th}$ state variable - called $\mathrm{Inc}$ - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we have the following equation for the new state variable:
 $$
-\frac{d\mathrm{Inc}}{dt} = \epsilon E
+(s, e, i, t, l, inc)\to(s, e-1, i+1, t, l, inc+1)
 $$
+
+__Modify your stochastic model to include this new transition and retrieve the daily incidence from the output of `ssa.adaptivetau`.__
+
+
 
 
 <div>
 # Navigate
-Top: [Index](index.html) Previous: [R introduction](intro_to_r_gk.html) <!-- Next: [TODO](mcmc_and_model_comparison.html) -->
+Top: [Index](index.html) Previous: [R introduction](intro_to_r_gk.html) Next: [My first fitmodel](my_first_fitmodel.html)
 </div>
 
 

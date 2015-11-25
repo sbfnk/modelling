@@ -1,0 +1,16 @@
+% My first `fitmodel`
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(cache=TRUE, fig.path='figure/my_first_fitmodel/', cache.path='cache/my_first_fitmodel/' , fig.cap='', fig.align="center", message=FALSE, tidy=TRUE, warning=FALSE)
+```
+
+```{r load, include=FALSE, cache=FALSE}
+library(fitR)
+set.seed(1234)
+```
+
+
+<div>
+# Navigate
+Top: [Index](index.html) Previous: [Code a stochastic model](code_sto_model.html) <!-- Next: [My first fitmodel](my_first_fitmodel.html) -->
+</div>

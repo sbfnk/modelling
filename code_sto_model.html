@@ -202,19 +202,18 @@ run_I_times &lt;-<span class="st"> </span><span class="kw">approx</span>(<span c
 ## 
 ## $y
 ##  [1]  16 325 363 170  77  32  16   7   3   1</code></pre>
-<p>If needed, one can applies this to all the variables returned by <code>ssa.adaptivetau</code> and construct a data frame with model output at the desired times.</p>
+<p><strong>Write a function that will apply the <code>approx</code> function to all the variables returned by <code>ssa.adaptivetau</code> and construct a data frame with model output at the desired times.</strong></p>
 </div>
 <div id="computing-incidence" class="section level2">
 <h2>Computing incidence</h2>
-<p>In order to fit the SEITL model to the Tristan da Cunha dataset we need to add one state variable and one parameter to the model:</p>
-<ul>
-<li><strong>The dataset represents daily incidence counts:</strong> we need to create a <span class="math inline">\(6^\mathrm{th}\)</span> state variable - called <span class="math inline">\(\mathrm{Inc}\)</span> - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we have the following equation for the new state variable: <span class="math display">\[
-\frac{d\mathrm{Inc}}{dt} = \epsilon E
-\]</span></li>
-</ul>
+<p>The Tristan da Cunha dataset correspond to daily incidence (number of new cases infected per day) rather than prevalence (number of cases infected over time). To obtain the daily incidence, we need to create a <span class="math inline">\(6^\mathrm{th}\)</span> state variable - called <span class="math inline">\(\mathrm{Inc}\)</span> - to track the daily number of new cases. Assuming that new cases are reported when they become symptomatic and infectious, we need to modify the transition corresponding to the onset of infectiousness:</p>
+<p><span class="math display">\[
+(s, e, i, t, l, inc)\to(s, e-1, i+1, t, l, inc+1)
+\]</span></p>
+<p><strong>Modify your stochastic model to include this new transition and retrieve the daily incidence from the output of <code>ssa.adaptivetau</code>.</strong></p>
 <div>
 <h1 id="navigate">Navigate</h1>
-<p>Top: <a href="index.html">Index</a> Previous: <a href="intro_to_r_gk.html">R introduction</a> <!-- Next: [TODO](mcmc_and_model_comparison.html) --></p>
+<p>Top: <a href="index.html">Index</a> Previous: <a href="intro_to_r_gk.html">R introduction</a> Next: <a href="my_first_fitmodel.html">My first fitmodel</a></p>
 </div>
 </div>
 </div>

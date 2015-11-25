@@ -1,0 +1,35 @@
+% Solution for the SEITL model
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(cache=TRUE, fig.path='figure/SEITL_flowchart/', cache.path='cache/SEITL_flowchart/' , fig.cap='', fig.align="center", message=FALSE, tidy=TRUE, warning=FALSE)
+```
+# Flowchart
+
+![The SEITL model extends the classical SEIR model by splitting the R compartement (recovered) to account for the dynamics and host heterogeneity of the immune response among the islanders. Following recovery, hosts remain temporarily protected against reinfection thanks to the cellular immune response (T-cells). Accordingly, they enter the T stage (temporary protection). Then, following down-regulation of the cellular response, the humoral immune response (antibodies) has a probability $\alpha$ to reach a level sufficient to protect against reinfection. In this case, recovered hosts enter the L stage (long-term protection), but otherwise they remain unprotected and re-enter the susceptible pool (S).
+](ext_fig/SEITL.jpg)
+
+The SEITL model can be described with five states (S, E, I, T and L) and five parameters:
+
+1. basic reproductive number ($R_0$)
+2. latent period ($D_\mathrm{lat}$)
+3. infectious period ($D_\mathrm{inf}$)
+4. temporary-immune period ($D_\mathrm{imm}$)
+5. probability of developing a long-term protection ($\alpha$).
+
+and we define the effective contact rate $\beta=R_0/D_\mathrm{inf}$, the rate of onset of infectiousness $\epsilon=1/D_\mathrm{lat}$, the recovery rate $\nu = 1/D_\mathrm{inf}$, the rate of loss of temporary immunity $\tau=1/D_\mathrm{imm}$ and $N = S + E + I + L + T$ the constant poulation size.
+
+# Guess for parameter values
+
+Based on the description of the outbreak and the information found in the literature we can make the following guess estimates:
+
+1. Since the Tristan population is a close knit community, $R_0$ was probably above 2 during the outbreak. Let's assume $R_0=4$.
+2. Both the latent ($D_\mathrm{lat}$) and infectious ($D_\mathrm{inf}$) periods are equal to 2 days.
+3. The average duration of immunity ($D_\mathrm{imm}$) is equal to 15 - 2 = 13 days.
+4. Since not all seroconverted individuals acquire a long-term protective against reinfection, let's assume $\alpha=0.70$
+5. Assuming 80% of symptomatic and 85% of the cases reported in the data, we obtain an overall reporting rate $\rho=0.8\times0.85 \sim 0.7$. 
+6. The 2 islanders with symptoms at disembarkation are infectious: $I(t=0)=2$.
+7. The 3 islanders who were ill during the 8-day journey are temporary protected at disembarkation: $T(t=0)=3$.
+8. No islander was immune at the beginning of the epidemic. 
+
+You can now return to the [practical session](code_sto_model.html#write-the-transition-table) and write down the transition table of the SEITL model.
+

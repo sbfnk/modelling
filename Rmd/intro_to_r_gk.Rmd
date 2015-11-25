@@ -2,7 +2,7 @@
 title: "Introduction to infectious disease modelling in R"
 ---
 
-```{r libs, cache=FALSE, echo=FALSE, results = "hide"}
+```{r libs, cache=FALSE, echo=FALSE, results = "hide", warning = FALSE}
 library('curl')
 ```
 
@@ -561,3 +561,10 @@ Remember that the population size should stay constant, at say 1,000.
 ## Extending the SIR model
 
 If you have time, you can now try to build more complex versions of the SIR model to match the infectious disease you are interested in. For example, you could try and include multiple strains of influenza or extend the model to include some of the complexity of TB. The first stage would be to sketch the model structure on paper. Remember that simplicity is the key and that you will need data to inform any parameter values. Secondly, translate the model structure into differential equations. Thirdly, translate the differential equations into a new function to use in the ode solver function. 
+
+
+<div>
+# Navigate
+Top: [Index](index.html) Next: [Code a stochastic model](code_sto_model.html)
+</div>
+

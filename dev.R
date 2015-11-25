@@ -2,7 +2,7 @@ require('rmarkdown')
 
 project_dir <- path.expand("~/edu/chennai-modelling")
 Rmd_dir <- file.path(project_dir, "Rmd")
-html_dir <- file.path(project_dir, "gh-pages")
+html_dir <- file.path(project_dir, "website")
 
 # Rmd_files <- c("index","code_sto_model","play_with_seitl","play_with_seitl_example")
 # Rmd_files <- c("code_sto_model", "SEITL_model", "SEITL_deter", "SEITL_flowchart")

@@ -27,3 +27,6 @@ Part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~si
 ## Lecture Slides
 
 [An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf)
+
+[Why do we model infectious diseases? Policy and practicalities](interventions.pptx)
+

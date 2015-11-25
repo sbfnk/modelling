@@ -9,5 +9,6 @@
 *.sublime-workspace
 
 gh-pages/
+website/
 Rmd/cache/
 Rmd/figure/

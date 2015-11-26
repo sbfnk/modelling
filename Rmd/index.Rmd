@@ -23,5 +23,5 @@ Welcome to the Modelling Infectious Diseases course at The Institute of Mathemat
 
 * [An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf)
 * [Introduction to stochastic modelling](intro_sto_modelling.pdf)
-* [Why do we model infectious diseases? Policy and practicalities](interventions.pptx)
-
+* [Why do we model infectious diseases? Policy and practicalities](interventions.pdf)
+* [Model fitting and inference for infectious disease dynamics](intro_inference_chennai_slides.pdf)

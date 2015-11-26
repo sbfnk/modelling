@@ -162,7 +162,7 @@ img {
 <span class="co"># - n.iterations: the number of iterations</span>
 <span class="co"># The function returns a vector of samples of theta from the target</span>
 <span class="co"># distribution</span>
-my_mcmcMH &lt;-<span class="st"> </span>function(target, init.theta, proposal.sd, n.iterations) {
+mcmcMH &lt;-<span class="st"> </span>function(target, init.theta, proposal.sd, n.iterations) {
 
     <span class="co"># evaluate the function &quot;target&quot; at &quot;init.theta&quot;, and assign to</span>
     <span class="co"># a variable called target.theta.current.</span>

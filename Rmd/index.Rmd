@@ -18,6 +18,7 @@ Welcome to the Modelling Infectious Diseases course at The Institute of Mathemat
 1. [R Introduction](intro_to_r_gk.html)
 2. [Code a stochastic model](code_sto_model.html)
 3. [Using the fitR package](using_fitR.html)
+4. [Sampling from the posterior distribution using MCMC](mcmc.html)
 
 ## Lecture Slides
 

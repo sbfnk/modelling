@@ -123,7 +123,7 @@ my_mcmcMH <- function(target, init.theta, proposal.sd, n.iterations) {
 
 We can now use the Metropolis-Hastings sampler to sample from the posterior distribution of the previous practical. You should have a `my_dLogPosterior` function that evaluates the posterior distribution at a given value of the parameters and initial state, for a given model and with respect to a given data set (if you don't have this function, you can use the one from our [solution](posterior_example_solution.html)). Again, we need to slightly adapt this to be able to explore it with our Metropolis-Hastings sampler.
 
-Remember that we `mcmcMH` samples from a distribution that has a single parameter. Our simplest SIR model, however has two parameters: the basic reproduction number $R_0$ and the duration of infection $D_\mathrm{inf}$. So for now, we are going to keep the duration of infection fixed at 2 weeks and just explore the posterior distribution of $R_0$. 
+Remember that `mcmcMH` samples from a distribution that has a single parameter. Our simplest SIR model, however has two parameters: the basic reproduction number $R_0$ and the duration of infection $D_\mathrm{inf}$. So for now, we are going to keep the duration of infection fixed at 2 weeks and just explore the posterior distribution of $R_0$. 
 
 Lastly, `my_dLogPosterior` takes four parameters, and to use it with the `mcmcMH` function we have to turn it into a function that just takes one parameter, here $R_0$. Again, we use a wrapper function for this, which returns the posterior density for a given value of $R_0$ for the `SIR` model with respect to the `epi1` data set, and for fixed `init.state` ($X_0$).
 

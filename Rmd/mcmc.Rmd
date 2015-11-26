@@ -12,8 +12,6 @@ data(SIR)
 data(SIR_reporting)
 ```
 
-[Lecture slides](slides/mcmc_slides1.pdf)
-
 # Objectives
 
 The aim of this session is to learn how to sample from a posterior distribution using MCMC with the Metropolis-Hastings algorithm. More specifically, in this session you will

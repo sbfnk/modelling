@@ -1,5 +1,5 @@
-# chennai-modelling
+# Infectious disease modelling in R
 
-Course on infectious disease modelling held in Chennai, India, 23-26 November 2015.
+Introductory material based on a course on infectious disease modelling held in Chennai, India, 23-26 November 2015.
 
-For all the course materials, navigate to the [course webpage](http://sbfnk.github.io/chennai-modelling).
+For the course materials, navigate to the [course webpage](http://sbfnk.github.io/modelling).

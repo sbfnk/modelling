@@ -6,7 +6,9 @@ output:
     toc: false  
 ---
 
-Welcome to the introductory material on infectious disease modelling in R. The material presented here is based on the Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India, held as part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/), 23-28 November, 2015. Below you will find the lab practical sessions, which can also be used for self-study.
+![](ext_fig/lshtm_cmmid.png)
+
+Welcome to the introductory material on infectious disease modelling in R. The material included here is based on the Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India, held as part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/), 23-28 November, 2015. Below you will find the lab practical sessions, which can also be used for self-study.
 
 
 ## Required software
@@ -15,8 +17,8 @@ Welcome to the introductory material on infectious disease modelling in R. The m
 
 ## Lab sessions
 
-1. [R Introduction](intro_to_r_gk.html)
-2. [Code a stochastic model](code_sto_model.html)
+1. [R Introduction and deterministic models](intro_to_r_gk.html)
+2. [Stochastic models](code_sto_model.html)
 <!-- 3. [Using the fitR package](using_fitR.html) -->
 <!-- 4. [Sampling from the posterior distribution using MCMC](mcmc.html) -->
 

@@ -3,7 +3,6 @@
 .Rdata
 *.pdf
 *.csv
-*.jpg
 *.txt
 *.sublime-project
 *.sublime-workspace

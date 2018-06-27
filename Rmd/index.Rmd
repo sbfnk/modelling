@@ -1,12 +1,12 @@
 ---
-title: "Introduction to infectious disease modelling"
+title: "Introduction to infectious disease modelling in R"
 author: by Sebastian Funk, Gwen Knight and Anton Camacho
 output:
   html_document:
     toc: false  
 ---
 
-Welcome to the Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India, part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/), 23-28 November, 2015. Below you will find everything that is needed for the lab practical sessions, as well as the slides from our lectures.
+Welcome to the introductory material on infectious disease modelling in R. The material presented here is based on the Modelling Infectious Diseases course at The Institute of Mathematical Sciences, Chennai, India, held as part of the [Workshop on Infectious Disease Modeling](http://www.imsc.res.in/~sitabhra/meetings/infection15/), 23-28 November, 2015. Below you will find the lab practical sessions, which can also be used for self-study.
 
 
 ## Required software
@@ -17,12 +17,12 @@ Welcome to the Modelling Infectious Diseases course at The Institute of Mathemat
 
 1. [R Introduction](intro_to_r_gk.html)
 2. [Code a stochastic model](code_sto_model.html)
-3. [Using the fitR package](using_fitR.html)
-4. [Sampling from the posterior distribution using MCMC](mcmc.html)
+<!-- 3. [Using the fitR package](using_fitR.html) -->
+<!-- 4. [Sampling from the posterior distribution using MCMC](mcmc.html) -->
 
-## Lecture Slides
+<!-- ## Lecture Slides -->
 
-* [An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf)
-* [Introduction to stochastic modelling](intro_sto_modelling.pdf)
-* [Why do we model infectious diseases? Policy and practicalities](interventions.pdf)
-* [Model fitting and inference for infectious disease dynamics](intro_inference_chennai_slides.pdf)
+<!-- * [An introduction to infectious disease modelling and its applications](intro_modelling_chennai.pdf) -->
+<!-- * [Introduction to stochastic modelling](intro_sto_modelling.pdf) -->
+<!-- * [Why do we model infectious diseases? Policy and practicalities](interventions.pdf) -->
+<!-- * [Model fitting and inference for infectious disease dynamics](intro_inference_chennai_slides.pdf) -->
